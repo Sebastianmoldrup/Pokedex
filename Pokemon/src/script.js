@@ -1,4 +1,5 @@
 const pokeDex = document.querySelector('[data-name = pokedex]');
+const pagination = document.querySelector('[data-name = pagination]');
 // 905
 
 // We use page and index to say how many
@@ -27,7 +28,7 @@ const colors = {
 const typeColor = Object.keys(colors);
 
 // Function to fetch the pokemons from the api using ASYNC/AWAIT
-async function fetchPokemon(index = 1) {
+async function fetchPokemon(index) {
 
     // Loop through all the pokemons
     for (let id = index; id < index + page; id++) {
@@ -44,44 +45,80 @@ async function fetchPokemon(index = 1) {
     }
 }
 
+fetchPokemon(1)
+
 // Function to create the pokemon card
 const createPokemonCard = (pokemon) => {
 
     // Storing the DOM elements we create in variable
     const pokeContainer = document.createElement('div');
     const pokeImg       = document.createElement('img');
-    const pokeName      = document.createElement('span');
-    const pokeId        = document.createElement('span');
-    const pokeType      = document.createElement('span');
+    const pokeName      = document.createElement('div');
+    const pokeId        = document.createElement('div');
+    const pokeType      = document.createElement('div');
 
 
     // To get the right type we have to use array functions to get them
     const pokemonTypes = pokemon.types.map(type => type.type.name);
     const type = typeColor.find(type => pokemonTypes.indexOf(type) > -1);
 
+    // Adding the correct background color to match the type
+    const color = colors[type];
+    pokeContainer.style.backgroundColor = color;
+
     // Putting the data into the DOM elements
     pokeImg.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
     pokeName.innerText = pokemon.name;
-    pokeId.innerText   = pokemon.id;
+    pokeId.innerText   = "#" + pokemon.id;
     pokeType.innerText = type;
 
-    // Styling
-    pokeContainer.classList.add('');
-    pokeImg.classList.add('');
-    pokeName.classList.add('');
-    pokeId.classList.add('');
-    pokeType.classList.add('');
+    // Styling with tailwind css classes
+    pokeContainer.classList.add("grid", "grid-col", "justify-center", "mt-10");
+    pokeImg.classList.add("grid", "justify-center");
+    pokeName.classList.add("text-center", "font-bold", "text-2xl", "capitalize");
+    pokeId.classList.add("text-center", "bg-black", "p-1");
+    pokeType.classList.add("text-center", "font-semibold", "text-1xl", "capitalize");
 
 
     // Appending the card together before sending it to the HTML
     pokeContainer.appendChild(pokeImg);
-    pokeContainer.appendChild(pokeName);
     pokeContainer.appendChild(pokeId);
+    pokeContainer.appendChild(pokeName);
     pokeContainer.appendChild(pokeType);
 
     pokeDex.appendChild(pokeContainer);
 
 }
 
+(prevPage = () => {
+    const prevButton = document.createElement("button");
+    prevButton.innerText = "Previous";
+    prevButton.classList.add("font-semibold");
 
-fetchPokemon(1);
+    prevButton.addEventListener("click", () => {
+        if(index === 1) return;
+        pokeDex.innerHTML = '';
+        fetchPokemon(index = index - 5);
+    });
+
+    pagination.appendChild(prevButton);
+    
+})();
+
+(nextPage = () => {
+    const nextButton = document.createElement("button");
+    nextButton.innerText = "Next";
+    nextButton.classList.add("font-semibold");
+
+    nextButton.addEventListener("click", () => {
+        if(index === 900) return;
+        pokeDex.innerHTML = '';
+        fetchPokemon(index = index + 5);
+    });
+
+    pagination.appendChild(nextButton);
+    
+})();
+
+pagination.classList.add("flex", "flex-row", "justify-between", "mt-10")
+
