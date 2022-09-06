@@ -99,19 +99,20 @@ const createPokemonCard = (pokemon) => {
         if(index === 1) return;
         pokeDex.innerHTML = '';
         fetchPokemon(index = index - 5);
+
+        if(page === 1) return;
+        page = page - 1;
+        document.querySelector('[data = page]').innerText = page;
     });
 
     pagination.appendChild(prevButton);
-
-    if(page === 1) return;
-    page = page - 1;
-    document.querySelector('[data = page]').innerText = page;
     
 })();
 
 (pageNumber = () => {
     const displayPage = document.createElement('span');
-    displayPage.setAttribute("data", "page")
+    displayPage.setAttribute("data", "page");
+    displayPage.innerText = page;
 
     pagination.appendChild(displayPage);
 })();
@@ -127,16 +128,12 @@ const createPokemonCard = (pokemon) => {
         if(index === 900) return;
         pokeDex.innerHTML = '';
         fetchPokemon(index = index + 5);
+
+        if(page === 181) return;
+        page = page + 1;
+        document.querySelector('[data = page]').innerText = page;
     });
 
     pagination.appendChild(nextButton);
 
-    if(page === 181) return;
-    page = page + 1;
-    document.querySelector('[data = page]').innerText = page;
-    
 })();
-
-
-
-console.log(page);
