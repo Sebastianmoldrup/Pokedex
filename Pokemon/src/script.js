@@ -95,8 +95,8 @@ const createPokemonCard = (pokemon) => {
     pokeContainer.classList.add("grid", "grid-col", "place-items-center", "mt-10", "p-5", "w-48", "rounded-md", "shadow-lg", "shadow-black");
     pokeImg.classList.add("grid", "grid-col", "justify-center");
     pokeName.classList.add("text-center", "font-bold", "text-2xl", "capitalize");
-    pokeId.classList.add("text-center", "bg-", "opacity-75", "p-1");
-    pokeType.classList.add("text-center", "text-1xl", "capitalize");
+    pokeId.classList.add("text-center", "bg-white", "opacity-75", "px-4", "py-1", "rounded-lg", "my-4");
+    pokeType.classList.add("text-center", "text-1xl", "capitalize", "py-2");
 
     // Appending the card together
     pokeContainer.appendChild(pokeImg);
