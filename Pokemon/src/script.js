@@ -3,8 +3,9 @@ const pagination = document.querySelector('[data-name = pagination]');
 // 905
 
 // We use page and index to say how many
-const page = 5;
+const pokemonDisplay = 5;
 let index = 1;
+let page = 1;
 
 // Colors for the different types
 const colors = {
@@ -31,7 +32,7 @@ const typeColor = Object.keys(colors);
 async function fetchPokemon(index) {
 
     // Loop through all the pokemons
-    for (let id = index; id < index + page; id++) {
+    for (let id = index; id < index + pokemonDisplay; id++) {
 
         // Store, Fetch and turn the response into JSON
         const url      = `https://pokeapi.co/api/v2/pokemon/${id}`;
@@ -40,8 +41,6 @@ async function fetchPokemon(index) {
 
         // Function to create the pokemon card
         createPokemonCard(pokemon);
-        console.log(pokemon);
-
     }
 }
 
@@ -73,27 +72,28 @@ const createPokemonCard = (pokemon) => {
     pokeType.innerText = type;
 
     // Styling with tailwind css classes
-    pokeContainer.classList.add("grid", "grid-col", "justify-center", "mt-10");
-    pokeImg.classList.add("grid", "justify-center");
+    pokeContainer.classList.add("grid", "grid-col", "place-items-center", "mt-10", "p-5", "w-48", "rounded-md", "shadow-lg", "shadow-black");
+    pokeImg.classList.add("grid", "grid-col", "justify-center");
     pokeName.classList.add("text-center", "font-bold", "text-2xl", "capitalize");
-    pokeId.classList.add("text-center", "bg-black", "p-1");
-    pokeType.classList.add("text-center", "font-semibold", "text-1xl", "capitalize");
+    pokeId.classList.add("text-center", "bg-", "opacity-75", "p-1");
+    pokeType.classList.add("text-center", "text-1xl", "capitalize");
 
-
-    // Appending the card together before sending it to the HTML
+    // Appending the card together
     pokeContainer.appendChild(pokeImg);
     pokeContainer.appendChild(pokeId);
     pokeContainer.appendChild(pokeName);
     pokeContainer.appendChild(pokeType);
 
+    // Appending the card to HTML
     pokeDex.appendChild(pokeContainer);
 
 }
 
+// Previous page/pokemon function
 (prevPage = () => {
     const prevButton = document.createElement("button");
     prevButton.innerText = "Previous";
-    prevButton.classList.add("font-semibold");
+    prevButton.classList.add("font-semibold", "bg-red-500", "p-2", "text-white", "w-32", "rounded-xl", "hover:bg-white", "hover:text-red-500", "shadow-lg", "shadow-red-500");
 
     prevButton.addEventListener("click", () => {
         if(index === 1) return;
@@ -102,13 +102,26 @@ const createPokemonCard = (pokemon) => {
     });
 
     pagination.appendChild(prevButton);
+
+    if(page === 1) return;
+    page = page - 1;
+    document.querySelector('[data = page]').innerText = page;
     
 })();
 
+(pageNumber = () => {
+    const displayPage = document.createElement('span');
+    displayPage.setAttribute("data", "page")
+
+    pagination.appendChild(displayPage);
+})();
+
+
+// Next page/pokemon function
 (nextPage = () => {
     const nextButton = document.createElement("button");
     nextButton.innerText = "Next";
-    nextButton.classList.add("font-semibold");
+    nextButton.classList.add("font-semibold", "bg-red-500", "p-2", "text-white", "w-32", "rounded-xl", "hover:bg-white", "hover:text-red-500", "shadow-lg", "shadow-red-500");
 
     nextButton.addEventListener("click", () => {
         if(index === 900) return;
@@ -117,8 +130,13 @@ const createPokemonCard = (pokemon) => {
     });
 
     pagination.appendChild(nextButton);
+
+    if(page === 181) return;
+    page = page + 1;
+    document.querySelector('[data = page]').innerText = page;
     
 })();
 
-pagination.classList.add("flex", "flex-row", "justify-between", "mt-10")
 
+
+console.log(page);
