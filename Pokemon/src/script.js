@@ -53,6 +53,8 @@ async function fetchPokemon(index) {
         // Function to create the pokemon card
         createPokemonCard(pokemon);
     }
+
+
 }
 
 // Initialize the page with the first 5 pokemon
@@ -115,21 +117,40 @@ const createPokemonCard = (pokemon) => {
 // PAGINATION
 // 
 
+const paginationButton = (text = "Error") => {
+    const button = document.createElement("button");
+    button.setAttribute("data-name", text);
+    button.innerText = text;
+    button.classList.add("font-semibold", "bg-red-500", "p-2", "text-white", "w-32", "rounded-xl", "hover:bg-white", "hover:text-red-500", "shadow-lg", "shadow-red-500");
+    return button;
+};
+
+const paginationButtonEventHandler = (e) => {
+    
+    pokeDex.innerHTML = '';
+
+    if(e.target.dataset.name === "previous") {
+        if(index === 900 || page === 181) return;
+        fetchPokemon(index -= 5);
+        page = page - 1;
+        document.querySelector('[data = page]').innerText = page;
+    }
+
+    if(e.target.dataset.name === "next") {
+        if(index === 900 || page === 181) return;
+        pokeDex.innerHTML = '';
+        fetchPokemon(index += 5);
+        page = page + 1;
+        document.querySelector('[data = page]').innerText = page;
+    }
+        
+}
 
 
-(paginationFunction = () => {
+const paginationFunction = () => {
 
-    // Creating the previous button Element
-    const prevButton = document.createElement("button");
-    prevButton.setAttribute("data", "previous");
-    prevButton.innerText = "Previous";
-    prevButton.classList.add("font-semibold", "bg-red-500", "p-2", "text-white", "w-32", "rounded-xl", "hover:bg-white", "hover:text-red-500", "shadow-lg", "shadow-red-500");
-
-    // Creating the next button Element
-    const nextButton = document.createElement("button");
-    nextButton.setAttribute("data", "next");
-    nextButton.innerText = "Next";
-    nextButton.classList.add("font-semibold", "bg-red-500", "p-2", "text-white", "w-32", "rounded-xl", "hover:bg-white", "hover:text-red-500", "shadow-lg", "shadow-red-500");
+    const prevButton = paginationButton("previous");
+    const nextButton = paginationButton("next");
 
     // Creating the page number display
     const displayPage = document.createElement('span');
@@ -141,31 +162,11 @@ const createPokemonCard = (pokemon) => {
     pagination.appendChild(displayPage);
     pagination.appendChild(nextButton);
 
-    // Next button click event handler
-    const nextClickEvent = () => {
-        if(index === 900) return;
-        pokeDex.innerHTML = '';
-        fetchPokemon(index = index + 5);
-
-        if(page === 181) return;
-        page = page + 1;
-        document.querySelector('[data = page]').innerText = page;
-    }
-
-    // Previous button click event handler
-    const prevClickEvent = () => {
-        if(index === 1) return;
-        pokeDex.innerHTML = '';
-        fetchPokemon(index = index - 5);
-
-        if(page === 1) return;
-        page = page - 1;
-        document.querySelector('[data = page]').innerText = page;
-    }
-
     // Event listener for the next and previous buttons
-    prevButton.addEventListener("click", prevClickEvent);
-    nextButton.addEventListener("click", nextClickEvent);
+    prevButton.addEventListener("click", paginationButtonEventHandler);
+    nextButton.addEventListener("click", paginationButtonEventHandler);
 
+};
 
-})();
+paginationFunction();
+
